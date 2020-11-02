@@ -64,10 +64,13 @@ def load_datas(args):
             dir_target = os.path.join(category_dir_target, filename)
             if not (os.path.exists(dir_source) and os.path.exists(dir_target)):
                 continue
-            filename_source = os.path.join(dir_source, 'model.ply') 
+            filename_source = os.path.join(dir_source, 'model.obj') 
             filename_target = os.path.join(dir_target, 'model.ply')
-            pointcloud_source = sample_mesh(filename_source, args.nsamples, args.normals)
-            pointcloud_target = sample_mesh(filename_target, args.nsamples, args.normals)
+            try:
+                pointcloud_source = sample_mesh(filename_source, args.nsamples, args.normals)
+                pointcloud_target = sample_mesh(filename_target, args.nsamples, args.normals)
+            except:
+                continue
             pointcloud_pair = pointcloud_source, pointcloud_target
             result_list.append(pointcloud_pair)
     return result_list
