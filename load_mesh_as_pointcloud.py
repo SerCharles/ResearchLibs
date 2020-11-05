@@ -3,7 +3,7 @@ import os
 import numpy as np
 import scipy.io as sio
 import trimesh
-import sklearn
+from sklearn import preprocessing
 
 
 
@@ -23,14 +23,14 @@ def sample_points(source_dir, target_dir, num_points):
     返回：无
     '''
     mesh = trimesh.load_mesh(source_dir)
-    points, index = trimesh.sample.sample_surface_even(mesh, num_points)
+    points, index = trimesh.sample.sample_surface(mesh, num_points)
     triangles = mesh.triangles[index]
     pt1 = triangles[:, 0, :]
     pt2 = triangles[:, 1, :]
     pt3 = triangles[:, 2, :]
     norm = np.cross(pt3 - pt1, pt2 - pt1)
-    norm = sklearn.preprocessing.normalize(norm, axis=1)
-    sio.savemat(target_dir, {'v': np.array(points), 'f': np.array(norm)}, oned_as='row')
+    norm = preprocessing.normalize(norm, axis=1)
+    sio.savemat(target_dir, {'v': np.array(points).astype(float), 'f': np.array(norm).astype(float)}, oned_as='row')
 
 def load_data(args):
     '''
@@ -40,14 +40,13 @@ def load_data(args):
     '''
     mkdir(args.target_base)
     for category in args.categories:
-        source_dir_raw = os.path.join(args.source_base, category)
         target_dir = os.path.join(args.target_base, category)
         mkdir(target_dir)
         for use_type in ['train', 'val', 'test']:
-            source_dir = os.path.join(source_dir_raw, use_type)
+            source_dir = os.path.join(args.source_base, use_type, category)
             objs = os.listdir(source_dir)
             for obj in objs:
-                obj_model_path = os.path.join(source_dir, obj, 'model.obj')
+                obj_model_path = os.path.join(source_dir, obj, 'model.ply')
                 obj_result_path = os.path.join(target_dir, obj + '.mat')
                 sample_points(obj_model_path, obj_result_path, args.num_points)
 
