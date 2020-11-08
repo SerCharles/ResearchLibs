@@ -46,10 +46,10 @@ def load_datas(args):
     返回：一个列表，每个元素是配对的点云
     '''
     result_list = []
-    base_dir_source = '/home/shenguanlin/R2N2/output/ResidualGRUNet'
+    base_dir_source = '/home/shenguanlin/TMNet/results'
     base_dir_source = os.path.join(base_dir_source, args.run_name)
-    base_dir_source = os.path.join(base_dir_source, 'result')
-    base_dir_target = '/home/shenguanlin/ShapeFlow/data/shapenet_simplified/test' 
+    #base_dir_source = os.path.join(base_dir_source, 'result')
+    base_dir_target = '/home2/lbq/deformmulti_changecode/data/shapenet_simplified/test' 
     categories = []
     if args.category == None:
         categories = ['02691156', '02958343', '03001627']
@@ -64,7 +64,7 @@ def load_datas(args):
             dir_target = os.path.join(category_dir_target, filename)
             if not (os.path.exists(dir_source) and os.path.exists(dir_target)):
                 continue
-            filename_source = os.path.join(dir_source, 'model.obj') 
+            filename_source = os.path.join(dir_source, 'model.ply') 
             filename_target = os.path.join(dir_target, 'model.ply')
             try:
                 pointcloud_source = sample_mesh(filename_source, args.nsamples, args.normals)

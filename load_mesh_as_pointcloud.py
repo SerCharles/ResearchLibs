@@ -30,7 +30,7 @@ def sample_points(source_dir, target_dir, num_points):
     pt3 = triangles[:, 2, :]
     norm = np.cross(pt3 - pt1, pt2 - pt1)
     norm = preprocessing.normalize(norm, axis=1)
-    sio.savemat(target_dir, {'v': np.array(points).astype(float), 'f': np.array(norm).astype(float)}, oned_as='row')
+    sio.savemat(target_dir, {'v': np.array(points).astype(np.float32), 'f': np.array(norm).astype(np.float32)}, oned_as='row')
 
 def load_data(args):
     '''
